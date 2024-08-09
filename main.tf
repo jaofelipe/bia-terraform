@@ -28,6 +28,13 @@ resource "aws_security_group" "bia-dev" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  egress {
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 }
 
 resource "aws_instance" "bia-dev" {
@@ -35,10 +42,10 @@ resource "aws_instance" "bia-dev" {
   instance_type = "t3.micro"
   tags = {
     ambiente = "dev"
-    Name     = "bia-dev"
+    Name     = var.instance_name
   }
-  vpc_security_group_ids = ["sg-0887647cbb4e0bc6e"]
+  vpc_security_group_ids = [aws_security_group.bia-dev.id]
   root_block_device {
-    volume_size = 10
+    volume_size = 12
   }
 }
